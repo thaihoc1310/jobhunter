@@ -2,6 +2,9 @@ package vn.thaihoc.jobhunter.service;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 import vn.thaihoc.jobhunter.domain.User;
 import vn.thaihoc.jobhunter.repository.UserRepository;
 
@@ -19,5 +22,17 @@ public class UserService {
 
     public void handleDeleteUserById(long id) {
         this.userRepository.deleteById(id);
+    }
+
+    public List<User> handleGetAllUsers() {
+        return this.userRepository.findAll();
+    }
+
+    public User handleGetUserById(long id) {
+        Optional<User> opUser = this.userRepository.findById(id);
+        if (opUser.isPresent())
+            return opUser.get();
+        else
+            return null;
     }
 }
