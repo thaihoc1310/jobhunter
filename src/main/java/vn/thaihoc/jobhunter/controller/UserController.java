@@ -6,6 +6,8 @@ import vn.thaihoc.jobhunter.domain.User;
 import vn.thaihoc.jobhunter.service.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 public class UserController {
@@ -15,13 +17,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user/create")
-    public String createNewUser() {
-        User user = new User();
-        user.setName("Hoc");
-        user.setEmail("thaihoc131005@gmail.com");
-        user.setPassword("123456");
-        this.userService.handleCreateUser(user);
-        return "User created";
+    // @GetMapping("/user/create")
+    @PostMapping("/user/create")
+    public User createNewUser(@RequestBody User user) {
+        return this.userService.handleCreateUser(user);
     }
 }
