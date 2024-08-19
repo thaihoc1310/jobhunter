@@ -35,4 +35,15 @@ public class UserService {
         else
             return null;
     }
+
+    public User handleUpdateUser(User user) {
+        User userupdate = this.handleGetUserById(user.getId());
+        if (userupdate != null) {
+            userupdate.setEmail(user.getEmail());
+            userupdate.setName(user.getName());
+            userupdate.setPassword(user.getPassword());
+            return this.userRepository.save(userupdate);
+        }
+        return null;
+    }
 }
