@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.thaihoc.jobhunter.domain.User;
 import vn.thaihoc.jobhunter.service.UserService;
+import vn.thaihoc.jobhunter.service.error.IdInvalidException;
+
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -31,7 +33,9 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable("id") long id) throws IdInvalidException {
+        if (id > 1000)
+            throw new IdInvalidException("id greater than 1000");
         this.userService.handleDeleteUserById(id);
         // return ResponseEntity.ok("delete user with id : " + id);
         return ResponseEntity.status(HttpStatus.OK).body("delete user with id : " + id);
