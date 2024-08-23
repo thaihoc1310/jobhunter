@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,14 +21,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 public class UserController {
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // @GetMapping("/users/create")
     @PostMapping("/users")
     public ResponseEntity<User> createNewUser(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User newUser = this.userService.handleCreateUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
@@ -38,7 +42,7 @@ public class UserController {
             throw new IdInvalidException("id greater than 1000");
         this.userService.handleDeleteUserById(id);
         // return ResponseEntity.ok("delete user with id : " + id);
-        return ResponseEntity.status(HttpStatus.OK).body("delete user with id : " + id);
+        return ResponseEntity.status(HttpStatus.OK).body("delete user success!");
     }
 
     @GetMapping("/users")
@@ -57,6 +61,7 @@ public class UserController {
 
     @PutMapping("/users")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User updateUser = this.userService.handleUpdateUser(user);
         return ResponseEntity.ok(updateUser);
         // return ResponseEntity.status(HttpStatus.OK).body(updateUser);

@@ -25,7 +25,8 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
             Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         HttpServletResponse servletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int status = servletResponse.getStatus();
-        RestResponse<Object> res = new RestResponse<>();
+
+        RestResponse<Object> res = new RestResponse<Object>();
         res.setStatusCode(status);
         if (status >= 400) {
             return body;
