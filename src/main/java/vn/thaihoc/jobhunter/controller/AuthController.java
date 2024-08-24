@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import vn.thaihoc.jobhunter.domain.dto.LoginDTO;
+import vn.thaihoc.jobhunter.domain.dto.RestLoginDTO;
 import vn.thaihoc.jobhunter.util.SercurityUtil;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -25,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginDTO> login(@Valid @RequestBody LoginDTO loginDTO)
+    public ResponseEntity<RestLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO)
             throws MethodArgumentNotValidException {
         // Nạp input gồm username/password vào Security
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -34,7 +35,8 @@ public class AuthController {
         Authentication authentication = this.authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // create token
-        this.sercurityUtil.createToken(authentication);
-        return ResponseEntity.ok().body(loginDTO);
+        String access_token = this.sercurityUtil.createToken(authentication);
+        RestLoginDTO res = new RestLoginDTO(access_token);
+        return ResponseEntity.ok().body(res);
     }
 }
