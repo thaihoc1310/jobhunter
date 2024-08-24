@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import vn.thaihoc.jobhunter.domain.dto.LoginDTO;
+import vn.thaihoc.jobhunter.util.SercurityUtil;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 public class AuthController {
     final private AuthenticationManagerBuilder authenticationManagerBuilder;
+    final private SercurityUtil sercurityUtil;
 
-    public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder) {
+    public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SercurityUtil sercurityUtil) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.sercurityUtil = sercurityUtil;
     }
 
     @PostMapping("/login")
@@ -29,6 +32,9 @@ public class AuthController {
                 loginDTO.getUsername(), loginDTO.getPassword());
         // xác thực người dùng => cần viết hàm loadUserByUsername
         Authentication authentication = this.authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        // create token
+        this.sercurityUtil.createToken(authentication);
         return ResponseEntity.ok().body(loginDTO);
     }
 }
