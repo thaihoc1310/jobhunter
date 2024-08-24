@@ -36,6 +36,10 @@ public class UserService {
             return null;
     }
 
+    public User handleGetUserByUsername(String email) {
+        return this.userRepository.findByEmail(email);
+    }
+
     public User handleUpdateUser(User user) {
         User userupdate = this.handleGetUserById(user.getId());
         if (userupdate != null) {

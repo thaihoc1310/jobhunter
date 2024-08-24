@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.thaihoc.jobhunter.domain.User;
 import vn.thaihoc.jobhunter.service.UserService;
-import vn.thaihoc.jobhunter.service.error.IdInvalidException;
+import vn.thaihoc.jobhunter.util.error.IdInvalidException;
 
 import java.util.List;
 

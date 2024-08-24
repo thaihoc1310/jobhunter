@@ -1,4 +1,4 @@
-package vn.thaihoc.jobhunter.service.error;
+package vn.thaihoc.jobhunter.util.error;
 
 public class IdInvalidException extends Exception {
     public IdInvalidException(String message) {
