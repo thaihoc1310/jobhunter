@@ -16,14 +16,14 @@ import vn.thaihoc.jobhunter.domain.RestResponse;
 
 @RestControllerAdvice
 public class GlobalExeption {
-    @ExceptionHandler(value = { IdInvalidException.class,
+    @ExceptionHandler(value = {
             UsernameNotFoundException.class,
             BadCredentialsException.class })
 
-    public ResponseEntity<RestResponse<Object>> handleIdInvalidException(IdInvalidException idException) {
+    public ResponseEntity<RestResponse<Object>> handleIdInvalidException(Exception ex) {
         RestResponse<Object> res = new RestResponse<>();
         res.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        res.setError(idException.getMessage());
+        res.setError(ex.getMessage());
         res.setMessage("Exception occurs...");
         return ResponseEntity.badRequest().body(res);
     }
