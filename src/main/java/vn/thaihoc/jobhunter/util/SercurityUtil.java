@@ -15,8 +15,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-import com.nimbusds.jose.util.Base64;
-
 @Service
 public class SercurityUtil {
     @Value("${thaihoc.jwt.base64secret}")
