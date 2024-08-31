@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import vn.thaihoc.jobhunter.domain.dto.LoginDTO;
 import vn.thaihoc.jobhunter.domain.dto.RestLoginDTO;
-import vn.thaihoc.jobhunter.util.SercurityUtil;
+import vn.thaihoc.jobhunter.util.SecurityUtil;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 public class AuthController {
     final private AuthenticationManagerBuilder authenticationManagerBuilder;
-    final private SercurityUtil sercurityUtil;
+    final private SecurityUtil sercurityUtil;
 
-    public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SercurityUtil sercurityUtil) {
+    public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SecurityUtil sercurityUtil) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.sercurityUtil = sercurityUtil;
     }

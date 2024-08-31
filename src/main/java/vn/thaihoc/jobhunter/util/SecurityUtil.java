@@ -3,9 +3,6 @@ package vn.thaihoc.jobhunter.util;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -16,7 +13,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SercurityUtil {
+public class SecurityUtil {
     @Value("${thaihoc.jwt.base64secret}")
     private String jwtKey;
 
@@ -26,7 +23,7 @@ public class SercurityUtil {
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
     public final JwtEncoder jwtEncoder;
 
-    public SercurityUtil(JwtEncoder jwtEncoder) {
+    public SecurityUtil(JwtEncoder jwtEncoder) {
         this.jwtEncoder = jwtEncoder;
     }
 
