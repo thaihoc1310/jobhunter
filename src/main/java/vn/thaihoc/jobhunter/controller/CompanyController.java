@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import vn.thaihoc.jobhunter.domain.Company;
 import vn.thaihoc.jobhunter.domain.dto.ResultPaginationDTO;
 import vn.thaihoc.jobhunter.service.CompanyService;
+import vn.thaihoc.jobhunter.util.annotation.ApiMessage;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,7 @@ public class CompanyController {
     }
 
     @GetMapping("/companies")
+    @ApiMessage("fetch all companies")
     public ResponseEntity<ResultPaginationDTO> getAllCompanies(
             @Filter Specification<Company> spec,
             Pageable pageable) {
