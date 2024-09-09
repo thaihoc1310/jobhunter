@@ -58,12 +58,13 @@ public class UserService {
     }
 
     public User handleUpdateUser(User user) {
-        User userupdate = this.handleGetUserById(user.getId());
-        if (userupdate != null) {
-            userupdate.setEmail(user.getEmail());
-            userupdate.setName(user.getName());
-            userupdate.setPassword(user.getPassword());
-            return this.userRepository.save(userupdate);
+        User userUpdate = this.handleGetUserById(user.getId());
+        if (userUpdate != null) {
+            userUpdate.setName(user.getName());
+            userUpdate.setGender(user.getGender());
+            userUpdate.setAge(user.getAge());
+            userUpdate.setAddress(user.getAddress());
+            return this.userRepository.save(userUpdate);
         }
         return null;
     }

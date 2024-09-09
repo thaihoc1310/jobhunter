@@ -9,6 +9,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,14 +20,26 @@ import vn.thaihoc.jobhunter.domain.RestResponse;
 public class GlobalExeption {
     @ExceptionHandler(value = {
             UsernameNotFoundException.class,
-            BadCredentialsException.class })
+            BadCredentialsException.class,
+            EmailInvalidException.class,
+            IdInvalidException.class })
 
-    public ResponseEntity<RestResponse<Object>> handleIdInvalidException(Exception ex) {
+    public ResponseEntity<RestResponse<Object>> handleBadCredentialsException(Exception ex) {
         RestResponse<Object> res = new RestResponse<>();
         res.setStatusCode(HttpStatus.BAD_REQUEST.value());
         res.setError(ex.getMessage());
         res.setMessage("Exception occurs...");
         return ResponseEntity.badRequest().body(res);
+    }
+
+    @ExceptionHandler(value = NoResourceFoundException.class)
+    public ResponseEntity<RestResponse<Object>> handleNoResourceFoundException(
+            NoResourceFoundException noResourceFoundException) {
+        RestResponse<Object> res = new RestResponse<>();
+        res.setStatusCode(HttpStatus.NOT_FOUND.value());
+        res.setError(noResourceFoundException.getMessage());
+        res.setMessage("Resource not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -39,15 +53,6 @@ public class GlobalExeption {
         List<String> errors = fieldErrors.stream().map(f -> f.getDefaultMessage())
                 .collect(Collectors.toList());
         res.setMessage(errors.size() > 1 ? errors : errors.get(0));
-        return ResponseEntity.badRequest().body(res);
-    }
-
-    @ExceptionHandler(value = EmailExistException.class)
-    public ResponseEntity<RestResponse<Object>> handleEmailExistException(EmailExistException emailExistException) {
-        RestResponse<Object> res = new RestResponse<>();
-        res.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        res.setError(emailExistException.getMessage());
-        res.setMessage("Exception occurs...");
         return ResponseEntity.badRequest().body(res);
     }
 }

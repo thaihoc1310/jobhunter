@@ -4,12 +4,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turkraft.springfilter.boot.Filter;
 
-import vn.thaihoc.jobhunter.domain.Company;
 import vn.thaihoc.jobhunter.domain.User;
 import vn.thaihoc.jobhunter.domain.dto.ResultPaginationDTO;
 import vn.thaihoc.jobhunter.service.UserService;
 import vn.thaihoc.jobhunter.util.annotation.ApiMessage;
-import vn.thaihoc.jobhunter.util.error.EmailExistException;
+import vn.thaihoc.jobhunter.util.error.EmailInvalidException;
 import vn.thaihoc.jobhunter.util.error.IdInvalidException;
 
 import org.springframework.data.domain.Pageable;
@@ -38,9 +37,10 @@ public class UserController {
 
     // @GetMapping("/users/create")
     @PostMapping("/users")
-    public ResponseEntity<User> createNewUser(@RequestBody User user) throws EmailExistException {
+    @ApiMessage("Create a new user")
+    public ResponseEntity<User> createNewUser(@RequestBody User user) throws EmailInvalidException {
         if (this.userService.handleCheckUserExistByEmail(user.getEmail())) {
-            throw new EmailExistException("Email " + user.getEmail() + " already exists");
+            throw new EmailInvalidException("Email " + user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User newUser = this.userService.handleCreateUser(user);
@@ -48,12 +48,13 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") long id) throws IdInvalidException {
-        // if (id > 1000)
-        // throw new IdInvalidException("id greater than 1000");
+    @ApiMessage("Delete a user")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") long id) throws IdInvalidException {
+        if (this.userService.handleGetUserById(id) == null) {
+            throw new IdInvalidException("User with id = " + id + " not found");
+        }
         this.userService.handleDeleteUserById(id);
-        // return ResponseEntity.ok("delete user with id : " + id);
-        return ResponseEntity.status(HttpStatus.OK).body("delete user success!");
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @GetMapping("/users")
@@ -65,16 +66,23 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id") long id) {
+    @ApiMessage("Fetch user by id")
+    public ResponseEntity<User> getUser(@PathVariable("id") long id) throws IdInvalidException {
         User user = this.userService.handleGetUserById(id);
+        if (user == null) {
+            throw new IdInvalidException("User with id = " + id + " not found");
+        }
         return ResponseEntity.ok(user);
         // return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     @PutMapping("/users")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    @ApiMessage("Update a user")
+    public ResponseEntity<User> updateUser(@RequestBody User user) throws IdInvalidException {
         User updateUser = this.userService.handleUpdateUser(user);
+        if (updateUser == null) {
+            throw new IdInvalidException("User with id = " + user.getId() + " not found");
+        }
         return ResponseEntity.ok(updateUser);
         // return ResponseEntity.status(HttpStatus.OK).body(updateUser);
     }
