@@ -4,7 +4,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turkraft.springfilter.boot.Filter;
 
+import jakarta.validation.Valid;
 import vn.thaihoc.jobhunter.domain.User;
+import vn.thaihoc.jobhunter.domain.dto.RestCreateUserDTO;
+import vn.thaihoc.jobhunter.domain.dto.RestUserDTO;
 import vn.thaihoc.jobhunter.domain.dto.ResultPaginationDTO;
 import vn.thaihoc.jobhunter.service.UserService;
 import vn.thaihoc.jobhunter.util.annotation.ApiMessage;
@@ -38,13 +41,13 @@ public class UserController {
     // @GetMapping("/users/create")
     @PostMapping("/users")
     @ApiMessage("Create a new user")
-    public ResponseEntity<User> createNewUser(@RequestBody User user) throws EmailInvalidException {
+    public ResponseEntity<RestCreateUserDTO> createNewUser(@Valid @RequestBody User user) throws EmailInvalidException {
         if (this.userService.handleCheckUserExistByEmail(user.getEmail())) {
             throw new EmailInvalidException("Email " + user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User newUser = this.userService.handleCreateUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.convertToRestCreateUserDTO(newUser));
     }
 
     @DeleteMapping("/users/{id}")
@@ -67,12 +70,12 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     @ApiMessage("Fetch user by id")
-    public ResponseEntity<User> getUser(@PathVariable("id") long id) throws IdInvalidException {
+    public ResponseEntity<RestUserDTO> getUser(@PathVariable("id") long id) throws IdInvalidException {
         User user = this.userService.handleGetUserById(id);
         if (user == null) {
             throw new IdInvalidException("User with id = " + id + " not found");
         }
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(this.userService.convertToRestUserDTO(user));
         // return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 

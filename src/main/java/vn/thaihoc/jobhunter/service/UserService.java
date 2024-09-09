@@ -6,9 +6,14 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import vn.thaihoc.jobhunter.domain.User;
 import vn.thaihoc.jobhunter.domain.dto.Meta;
+import vn.thaihoc.jobhunter.domain.dto.RestCreateUserDTO;
+import vn.thaihoc.jobhunter.domain.dto.RestUpdateUserDTO;
+import vn.thaihoc.jobhunter.domain.dto.RestUserDTO;
 import vn.thaihoc.jobhunter.domain.dto.ResultPaginationDTO;
 import vn.thaihoc.jobhunter.repository.UserRepository;
 
@@ -22,6 +27,42 @@ public class UserService {
 
     public User handleCreateUser(User user) {
         return this.userRepository.save(user);
+    }
+
+    public RestCreateUserDTO convertToRestCreateUserDTO(User user) {
+        RestCreateUserDTO restCreateUserDTO = new RestCreateUserDTO();
+        restCreateUserDTO.setId(user.getId());
+        restCreateUserDTO.setName(user.getName());
+        restCreateUserDTO.setEmail(user.getEmail());
+        restCreateUserDTO.setGender(user.getGender());
+        restCreateUserDTO.setAge(user.getAge());
+        restCreateUserDTO.setAddress(user.getAddress());
+        restCreateUserDTO.setCreatedAt(user.getCreatedAt());
+        return restCreateUserDTO;
+    }
+
+    public RestUserDTO convertToRestUserDTO(User user) {
+        RestUserDTO restUserDTO = new RestUserDTO();
+        restUserDTO.setId(user.getId());
+        restUserDTO.setName(user.getName());
+        restUserDTO.setEmail(user.getEmail());
+        restUserDTO.setGender(user.getGender());
+        restUserDTO.setAge(user.getAge());
+        restUserDTO.setAddress(user.getAddress());
+        restUserDTO.setCreatedAt(user.getCreatedAt());
+        restUserDTO.setUpdatedAt(user.getUpdatedAt());
+        return restUserDTO;
+    }
+
+    public RestUpdateUserDTO convertToRestUpdateUserDTO(User user) {
+        RestUpdateUserDTO restUpdateUserDTO = new RestUpdateUserDTO();
+        restUpdateUserDTO.setId(user.getId());
+        restUpdateUserDTO.setName(user.getName());
+        restUpdateUserDTO.setGender(user.getGender());
+        restUpdateUserDTO.setAge(user.getAge());
+        restUpdateUserDTO.setAddress(user.getAddress());
+        restUpdateUserDTO.setUpdatedAt(user.getUpdatedAt());
+        return restUpdateUserDTO;
     }
 
     public void handleDeleteUserById(long id) {
@@ -41,7 +82,18 @@ public class UserService {
         mt.setPages(pageUser.getTotalPages());
         mt.setTotal(pageUser.getTotalElements());
         rs.setMeta(mt);
-        rs.setResult(pageUser.getContent());
+        List<RestUserDTO> listUser = pageUser.getContent()
+                .stream().map(item -> new RestUserDTO(
+                        item.getId(),
+                        item.getName(),
+                        item.getEmail(),
+                        item.getAge(),
+                        item.getAddress(),
+                        item.getGender(),
+                        item.getCreatedAt(),
+                        item.getUpdatedAt()))
+                .collect(Collectors.toList());
+        rs.setResult(listUser);
         return rs;
     }
 
