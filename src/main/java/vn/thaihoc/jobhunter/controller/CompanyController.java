@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.turkraft.springfilter.boot.Filter;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
+@RequestMapping("/api/v1")
 public class CompanyController {
     final private CompanyService companyService;
 
@@ -38,7 +40,7 @@ public class CompanyController {
     }
 
     @GetMapping("/companies")
-    @ApiMessage("fetch all companies")
+    @ApiMessage("Fetch Companies")
     public ResponseEntity<ResultPaginationDTO> getAllCompanies(
             @Filter Specification<Company> spec,
             Pageable pageable) {

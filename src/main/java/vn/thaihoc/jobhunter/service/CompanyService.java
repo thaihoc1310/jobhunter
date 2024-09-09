@@ -10,7 +10,6 @@ import vn.thaihoc.jobhunter.domain.dto.Meta;
 import vn.thaihoc.jobhunter.domain.dto.ResultPaginationDTO;
 import vn.thaihoc.jobhunter.repository.CompanyRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

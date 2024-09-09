@@ -1,11 +1,15 @@
 package vn.thaihoc.jobhunter.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 import vn.thaihoc.jobhunter.domain.User;
+import vn.thaihoc.jobhunter.domain.dto.Meta;
+import vn.thaihoc.jobhunter.domain.dto.ResultPaginationDTO;
 import vn.thaihoc.jobhunter.repository.UserRepository;
 
 @Service
@@ -24,8 +28,21 @@ public class UserService {
         this.userRepository.deleteById(id);
     }
 
-    public List<User> handleGetAllUsers() {
-        return this.userRepository.findAll();
+    public boolean handleCheckUserExistByEmail(String email) {
+        return this.userRepository.existsByEmail(email);
+    }
+
+    public ResultPaginationDTO handleGetAllUsers(Specification<User> spec, Pageable pageable) {
+        Page<User> pageUser = this.userRepository.findAll(spec, pageable);
+        ResultPaginationDTO rs = new ResultPaginationDTO();
+        Meta mt = new Meta();
+        mt.setPage(pageable.getPageNumber() + 1);
+        mt.setPageSize(pageable.getPageSize());
+        mt.setPages(pageUser.getTotalPages());
+        mt.setTotal(pageUser.getTotalElements());
+        rs.setMeta(mt);
+        rs.setResult(pageUser.getContent());
+        return rs;
     }
 
     public User handleGetUserById(long id) {

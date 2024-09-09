@@ -15,8 +15,10 @@ import vn.thaihoc.jobhunter.util.SecurityUtil;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
+@RequestMapping("api/v1")
 public class AuthController {
     final private AuthenticationManagerBuilder authenticationManagerBuilder;
     final private SecurityUtil sercurityUtil;

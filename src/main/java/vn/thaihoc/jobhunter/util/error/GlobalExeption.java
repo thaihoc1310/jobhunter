@@ -41,4 +41,13 @@ public class GlobalExeption {
         res.setMessage(errors.size() > 1 ? errors : errors.get(0));
         return ResponseEntity.badRequest().body(res);
     }
+
+    @ExceptionHandler(value = EmailExistException.class)
+    public ResponseEntity<RestResponse<Object>> handleEmailExistException(EmailExistException emailExistException) {
+        RestResponse<Object> res = new RestResponse<>();
+        res.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        res.setError(emailExistException.getMessage());
+        res.setMessage("Exception occurs...");
+        return ResponseEntity.badRequest().body(res);
+    }
 }
