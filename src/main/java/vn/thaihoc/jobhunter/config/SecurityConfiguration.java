@@ -31,9 +31,6 @@ public class SecurityConfiguration {
     @Value("${thaihoc.jwt.base64secret}")
     private String jwtKey;
 
-    // @Value("${thaihoc.jwt.token-validity-in-seconds}")
-    // private String jwtKeyExpiration;
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -63,6 +60,7 @@ public class SecurityConfiguration {
         };
     }
 
+    // convert jwt to Authentication
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -81,7 +79,7 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         authz -> authz
-                                .requestMatchers("/", "/api/v1/login").permitAll()
+                                .requestMatchers("/", "/api/v1/login", "/api/v1/users").permitAll()
                                 .anyRequest().authenticated()
                 // .anyRequest().permitAll()
                 )
