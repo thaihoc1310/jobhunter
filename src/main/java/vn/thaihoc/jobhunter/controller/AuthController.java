@@ -16,11 +16,13 @@ import vn.thaihoc.jobhunter.domain.dto.LoginDTO;
 import vn.thaihoc.jobhunter.domain.dto.RestLoginDTO;
 import vn.thaihoc.jobhunter.service.UserService;
 import vn.thaihoc.jobhunter.util.SecurityUtil;
+import vn.thaihoc.jobhunter.util.annotation.ApiMessage;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("api/v1")
@@ -40,7 +42,8 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
+    @ApiMessage("Login successfully")
     public ResponseEntity<RestLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO)
             throws MethodArgumentNotValidException {
         String emailLogin = loginDTO.getUsername();
@@ -53,13 +56,12 @@ public class AuthController {
         Authentication authentication = this.authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // create token
-        String access_token = this.sercurityUtil.createAccessToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User currentUser = this.userService.handleGetUserByUsername(emailLogin);
         RestLoginDTO res = new RestLoginDTO();
-        res.setAccessToken(access_token);
         res.setUser(new RestLoginDTO.UserLogin(currentUser.getId(), currentUser.getEmail(), currentUser.getName()));
-
+        String access_token = this.sercurityUtil.createAccessToken(authentication, res.getUser());
+        res.setAccessToken(access_token);
         // create refresh token
         String refresh_token = this.sercurityUtil.createRefreshToken(emailLogin, res);
         this.userService.handleUpdateUserToken(emailLogin, refresh_token);
@@ -74,4 +76,16 @@ public class AuthController {
                 .build();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(res);
     }
+
+    @GetMapping("/auth/account")
+    @ApiMessage("Fetch account")
+    public ResponseEntity<RestLoginDTO.UserLogin> getAccount() {
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+
+        User currentUser = this.userService.handleGetUserByUsername(email);
+        RestLoginDTO.UserLogin userLogin = new RestLoginDTO.UserLogin(currentUser.getId(), currentUser.getEmail(),
+                currentUser.getName());
+        return ResponseEntity.ok(userLogin);
+    }
+
 }
