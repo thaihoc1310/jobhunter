@@ -66,12 +66,13 @@ public class AuthController {
 
     @GetMapping("/auth/account")
     @ApiMessage("Fetch account")
-    public ResponseEntity<RestLoginDTO.UserLogin> getAccount() {
+    public ResponseEntity<RestLoginDTO.UserAccount> getAccount() {
         String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         User currentUser = this.userService.handleGetUserByUsername(email);
-        RestLoginDTO.UserLogin userLogin = new RestLoginDTO.UserLogin(currentUser.getId(), currentUser.getEmail(),
-                currentUser.getName());
-        return ResponseEntity.ok(userLogin);
+        RestLoginDTO.UserAccount userAccount = new RestLoginDTO.UserAccount();
+        userAccount.setUser(new RestLoginDTO.UserLogin(currentUser.getId(), currentUser.getEmail(),
+                currentUser.getName()));
+        return ResponseEntity.ok(userAccount);
     }
 
     @GetMapping("/auth/refresh")
