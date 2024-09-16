@@ -87,4 +87,22 @@ public class AuthController {
         }
         return this.authService.createTokenAndCookie(email);
     }
+
+    @PostMapping("/auth/logout")
+    @ApiMessage("Logout successfully")
+    public ResponseEntity<Void> logout() {
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+        this.userService.handleUpdateUserToken(email, null);
+        ResponseCookie cookie = ResponseCookie
+                .from("refresh_token", null)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .build();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .build();
+    }
+
 }
