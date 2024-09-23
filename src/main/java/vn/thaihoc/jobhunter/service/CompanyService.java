@@ -6,17 +6,22 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import vn.thaihoc.jobhunter.domain.Company;
+import vn.thaihoc.jobhunter.domain.User;
 import vn.thaihoc.jobhunter.domain.response.ResultPaginationDTO;
 import vn.thaihoc.jobhunter.repository.CompanyRepository;
+import vn.thaihoc.jobhunter.repository.UserRepository;
 
 import java.util.Optional;
+import java.util.List;
 
 @Service
 public class CompanyService {
     final private CompanyRepository companyRepository;
+    final private UserRepository userRepository;
 
-    public CompanyService(CompanyRepository companyRepository) {
+    public CompanyService(CompanyRepository companyRepository, UserRepository userRepository) {
         this.companyRepository = companyRepository;
+        this.userRepository = userRepository;
     }
 
     public Company handleCreateCompany(Company company) {
@@ -58,6 +63,11 @@ public class CompanyService {
     }
 
     public void handleDeleteCompanyById(long id) {
+        Company com = this.handleGetCompanyById(id);
+        if (com != null) {
+            List<User> users = this.userRepository.findByCompany(com);
+            this.userRepository.deleteAll(users);
+        }
         this.companyRepository.deleteById(id);
     }
 }

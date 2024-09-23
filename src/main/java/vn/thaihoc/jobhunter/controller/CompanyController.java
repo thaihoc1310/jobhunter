@@ -33,6 +33,7 @@ public class CompanyController {
     }
 
     @PostMapping("/companies")
+    @ApiMessage("Create a company")
     public ResponseEntity<Company> createNewCompany(@Valid @RequestBody Company company)
             throws MethodArgumentNotValidException {
         Company newCompany = this.companyService.handleCreateCompany(company);
@@ -40,7 +41,7 @@ public class CompanyController {
     }
 
     @GetMapping("/companies")
-    @ApiMessage("Fetch Companies")
+    @ApiMessage("Fetch companies")
     public ResponseEntity<ResultPaginationDTO> getAllCompanies(
             @Filter Specification<Company> spec,
             Pageable pageable) {
@@ -48,12 +49,14 @@ public class CompanyController {
     }
 
     @PutMapping("/companies")
+    @ApiMessage("Update a company")
     public ResponseEntity<Company> updateCompany(@Valid @RequestBody Company company) {
         Company companyUpdate = this.companyService.handleUpdateCompany(company);
         return ResponseEntity.ok(companyUpdate);
     }
 
     @DeleteMapping("/companies/{id}")
+    @ApiMessage("Delete a company")
     public ResponseEntity<Void> deleteCompany(@PathVariable("id") long id) {
         this.companyService.handleDeleteCompanyById(id);
         return ResponseEntity.ok(null);
