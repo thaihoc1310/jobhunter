@@ -1,5 +1,12 @@
 package vn.thaihoc.jobhunter.repository;
 
-public class SkillRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 
+import vn.thaihoc.jobhunter.domain.Skill;
+
+@Repository
+public interface SkillRepository extends JpaRepository<Skill, Long>, JpaSpecificationExecutor<Skill> {
+    boolean existsByName(String name);
 }

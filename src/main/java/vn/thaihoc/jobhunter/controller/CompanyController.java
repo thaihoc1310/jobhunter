@@ -17,6 +17,7 @@ import vn.thaihoc.jobhunter.domain.Company;
 import vn.thaihoc.jobhunter.domain.response.ResultPaginationDTO;
 import vn.thaihoc.jobhunter.service.CompanyService;
 import vn.thaihoc.jobhunter.util.annotation.ApiMessage;
+import vn.thaihoc.jobhunter.util.error.IdInvalidException;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/companies")
 public class CompanyController {
     final private CompanyService companyService;
 
@@ -32,7 +33,7 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
-    @PostMapping("/companies")
+    @PostMapping("")
     @ApiMessage("Create a company")
     public ResponseEntity<Company> createNewCompany(@Valid @RequestBody Company company)
             throws MethodArgumentNotValidException {
@@ -40,7 +41,7 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newCompany);
     }
 
-    @GetMapping("/companies")
+    @GetMapping("")
     @ApiMessage("Fetch companies")
     public ResponseEntity<ResultPaginationDTO> getAllCompanies(
             @Filter Specification<Company> spec,
@@ -48,14 +49,18 @@ public class CompanyController {
         return ResponseEntity.ok(this.companyService.handleGetAllCompanies(spec, pageable));
     }
 
-    @PutMapping("/companies")
+    @PutMapping("")
     @ApiMessage("Update a company")
-    public ResponseEntity<Company> updateCompany(@Valid @RequestBody Company company) {
+    public ResponseEntity<Company> updateCompany(@Valid @RequestBody Company company)
+            throws MethodArgumentNotValidException, IdInvalidException {
         Company companyUpdate = this.companyService.handleUpdateCompany(company);
+        if (companyUpdate == null) {
+            throw new IdInvalidException("Company with id = " + company.getId() + " not found");
+        }
         return ResponseEntity.ok(companyUpdate);
     }
 
-    @DeleteMapping("/companies/{id}")
+    @DeleteMapping("/{id}")
     @ApiMessage("Delete a company")
     public ResponseEntity<Void> deleteCompany(@PathVariable("id") long id) {
         this.companyService.handleDeleteCompanyById(id);

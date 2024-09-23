@@ -20,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -40,9 +41,10 @@ public class UserController {
     }
 
     // @GetMapping("/users/create")
-    @PostMapping("/users")
+    @PostMapping("")
     @ApiMessage("Create a new user")
-    public ResponseEntity<RestCreateUserDTO> createNewUser(@Valid @RequestBody User user) throws EmailInvalidException {
+    public ResponseEntity<RestCreateUserDTO> createNewUser(@Valid @RequestBody User user)
+            throws EmailInvalidException, MethodArgumentNotValidException {
         if (this.userService.handleCheckUserExistByEmail(user.getEmail())) {
             throw new EmailInvalidException("Email " + user.getEmail() + " already exists");
         }
@@ -51,7 +53,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.convertToRestCreateUserDTO(newUser));
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     @ApiMessage("Delete a user")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") long id) throws IdInvalidException {
         if (this.userService.handleGetUserById(id) == null) {
@@ -61,7 +63,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    @GetMapping("/users")
+    @GetMapping("")
     @ApiMessage("Fetch Users")
     public ResponseEntity<ResultPaginationDTO> getAllCompanies(
             @Filter Specification<User> spec,
@@ -69,7 +71,7 @@ public class UserController {
         return ResponseEntity.ok(this.userService.handleGetAllUsers(spec, pageable));
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     @ApiMessage("Fetch user by id")
     public ResponseEntity<RestUserDTO> getUser(@PathVariable("id") long id) throws IdInvalidException {
         User user = this.userService.handleGetUserById(id);
@@ -80,9 +82,10 @@ public class UserController {
         // return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @PutMapping("/users")
+    @PutMapping("")
     @ApiMessage("Update a user")
-    public ResponseEntity<RestUpdateUserDTO> updateUser(@RequestBody User user) throws IdInvalidException {
+    public ResponseEntity<RestUpdateUserDTO> updateUser(@RequestBody User user)
+            throws IdInvalidException {
         User updateUser = this.userService.handleUpdateUser(user);
         if (updateUser == null) {
             throw new IdInvalidException("User with id = " + user.getId() + " not found");
