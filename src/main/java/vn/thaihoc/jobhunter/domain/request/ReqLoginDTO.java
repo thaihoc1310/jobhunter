@@ -1,4 +1,4 @@
-package vn.thaihoc.jobhunter.domain.dto;
+package vn.thaihoc.jobhunter.domain.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginDTO {
+public class ReqLoginDTO {
     @NotBlank(message = "username không được để trống")
     private String username;
 

@@ -10,11 +10,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import vn.thaihoc.jobhunter.domain.User;
-import vn.thaihoc.jobhunter.domain.dto.Meta;
-import vn.thaihoc.jobhunter.domain.dto.RestCreateUserDTO;
-import vn.thaihoc.jobhunter.domain.dto.RestUpdateUserDTO;
-import vn.thaihoc.jobhunter.domain.dto.RestUserDTO;
-import vn.thaihoc.jobhunter.domain.dto.ResultPaginationDTO;
+import vn.thaihoc.jobhunter.domain.response.RestCreateUserDTO;
+import vn.thaihoc.jobhunter.domain.response.RestUpdateUserDTO;
+import vn.thaihoc.jobhunter.domain.response.RestUserDTO;
+import vn.thaihoc.jobhunter.domain.response.ResultPaginationDTO;
 import vn.thaihoc.jobhunter.repository.UserRepository;
 
 @Service
@@ -76,7 +75,7 @@ public class UserService {
     public ResultPaginationDTO handleGetAllUsers(Specification<User> spec, Pageable pageable) {
         Page<User> pageUser = this.userRepository.findAll(spec, pageable);
         ResultPaginationDTO rs = new ResultPaginationDTO();
-        Meta mt = new Meta();
+        ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
         mt.setPage(pageable.getPageNumber() + 1);
         mt.setPageSize(pageable.getPageSize());
         mt.setPages(pageUser.getTotalPages());

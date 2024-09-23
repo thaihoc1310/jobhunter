@@ -1,4 +1,4 @@
-package vn.thaihoc.jobhunter.domain.dto;
+package vn.thaihoc.jobhunter.domain.response;
 
 import java.time.Instant;
 
@@ -8,11 +8,12 @@ import vn.thaihoc.jobhunter.util.constant.GenderEnum;
 
 @Getter
 @Setter
-public class RestUpdateUserDTO {
+public class RestCreateUserDTO {
     private long id;
+    private String email;
     private String name;
     private int age;
     private String address;
     private GenderEnum gender;
-    private Instant updatedAt;
+    private Instant createdAt;
 }

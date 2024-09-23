@@ -1,7 +1,5 @@
 package vn.thaihoc.jobhunter.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.Instant;
 
 import jakarta.persistence.Column;

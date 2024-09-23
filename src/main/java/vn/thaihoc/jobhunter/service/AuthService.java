@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import vn.thaihoc.jobhunter.domain.User;
-import vn.thaihoc.jobhunter.domain.dto.RestLoginDTO;
+import vn.thaihoc.jobhunter.domain.response.RestLoginDTO;
 import vn.thaihoc.jobhunter.util.SecurityUtil;
 
 @Service

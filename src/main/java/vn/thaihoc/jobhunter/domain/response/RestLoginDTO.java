@@ -1,4 +1,4 @@
-package vn.thaihoc.jobhunter.domain.dto;
+package vn.thaihoc.jobhunter.domain.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import vn.thaihoc.jobhunter.domain.User;
-import vn.thaihoc.jobhunter.domain.dto.LoginDTO;
-import vn.thaihoc.jobhunter.domain.dto.RestLoginDTO;
+import vn.thaihoc.jobhunter.domain.request.ReqLoginDTO;
+import vn.thaihoc.jobhunter.domain.response.RestLoginDTO;
 import vn.thaihoc.jobhunter.service.AuthService;
 import vn.thaihoc.jobhunter.service.UserService;
 import vn.thaihoc.jobhunter.util.SecurityUtil;
 import vn.thaihoc.jobhunter.util.annotation.ApiMessage;
 import vn.thaihoc.jobhunter.util.error.EmailInvalidException;
+import vn.thaihoc.jobhunter.util.error.IdInvalidException;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,7 +51,7 @@ public class AuthController {
 
     @PostMapping("/auth/login")
     @ApiMessage("Login successfully")
-    public ResponseEntity<RestLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO)
+    public ResponseEntity<RestLoginDTO> login(@Valid @RequestBody ReqLoginDTO loginDTO)
             throws MethodArgumentNotValidException {
         String emailLogin = loginDTO.getUsername();
         // Nạp input gồm username/password vào Security
@@ -78,7 +79,11 @@ public class AuthController {
     @GetMapping("/auth/refresh")
     @ApiMessage("Get user by refresh token")
     public ResponseEntity<RestLoginDTO> getRefreshToken(
-            @CookieValue(name = "refresh_token") String refreshToken) throws EmailInvalidException {
+            @CookieValue(name = "refresh_token", defaultValue = "nullval") String refreshToken)
+            throws EmailInvalidException, IdInvalidException {
+        if (refreshToken.equals("nullval")) {
+            throw new IdInvalidException("Refresh token is invalid");
+        }
         Jwt decondedToken = this.sercurityUtil.checkValidRefreshToken(refreshToken);
         String email = decondedToken.getSubject();
         // check user by token and email

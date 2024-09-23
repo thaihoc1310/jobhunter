@@ -14,7 +14,7 @@ import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
 import vn.thaihoc.jobhunter.domain.Company;
-import vn.thaihoc.jobhunter.domain.dto.ResultPaginationDTO;
+import vn.thaihoc.jobhunter.domain.response.ResultPaginationDTO;
 import vn.thaihoc.jobhunter.service.CompanyService;
 import vn.thaihoc.jobhunter.util.annotation.ApiMessage;
 
