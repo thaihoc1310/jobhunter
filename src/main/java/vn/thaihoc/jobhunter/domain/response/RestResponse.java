@@ -1,4 +1,4 @@
-package vn.thaihoc.jobhunter.domain;
+package vn.thaihoc.jobhunter.domain.response;
 
 import lombok.Getter;
 import lombok.Setter;

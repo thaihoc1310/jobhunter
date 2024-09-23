@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import vn.thaihoc.jobhunter.domain.response.RestResponse;
+
 import java.util.List;
 import java.util.stream.Collectors;
-
-import vn.thaihoc.jobhunter.domain.RestResponse;
 
 @RestControllerAdvice
 public class GlobalExeption {
