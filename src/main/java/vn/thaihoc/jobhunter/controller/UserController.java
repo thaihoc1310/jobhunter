@@ -7,6 +7,7 @@ import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
 import vn.thaihoc.jobhunter.domain.User;
 import vn.thaihoc.jobhunter.domain.response.RestCreateUserDTO;
+import vn.thaihoc.jobhunter.domain.response.RestUpdateUserDTO;
 import vn.thaihoc.jobhunter.domain.response.RestUserDTO;
 import vn.thaihoc.jobhunter.domain.response.ResultPaginationDTO;
 import vn.thaihoc.jobhunter.service.UserService;
@@ -81,12 +82,12 @@ public class UserController {
 
     @PutMapping("/users")
     @ApiMessage("Update a user")
-    public ResponseEntity<User> updateUser(@RequestBody User user) throws IdInvalidException {
+    public ResponseEntity<RestUpdateUserDTO> updateUser(@RequestBody User user) throws IdInvalidException {
         User updateUser = this.userService.handleUpdateUser(user);
         if (updateUser == null) {
             throw new IdInvalidException("User with id = " + user.getId() + " not found");
         }
-        return ResponseEntity.ok(updateUser);
+        return ResponseEntity.ok(this.userService.convertToRestUpdateUserDTO(updateUser));
         // return ResponseEntity.status(HttpStatus.OK).body(updateUser);
     }
 }

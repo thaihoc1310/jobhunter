@@ -16,4 +16,12 @@ public class RestCreateUserDTO {
     private String address;
     private GenderEnum gender;
     private Instant createdAt;
+    private CompanyUser company;
+
+    @Getter
+    @Setter
+    public class CompanyUser {
+        private long id;
+        private String name;
+    }
 }

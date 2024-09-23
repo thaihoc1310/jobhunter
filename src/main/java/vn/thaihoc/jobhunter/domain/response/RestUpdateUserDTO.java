@@ -15,4 +15,12 @@ public class RestUpdateUserDTO {
     private String address;
     private GenderEnum gender;
     private Instant updatedAt;
+    private CompanyUser company;
+
+    @Getter
+    @Setter
+    public static class CompanyUser {
+        private long id;
+        private String name;
+    }
 }

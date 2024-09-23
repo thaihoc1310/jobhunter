@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import vn.thaihoc.jobhunter.domain.Company;
 import vn.thaihoc.jobhunter.domain.User;
 import vn.thaihoc.jobhunter.domain.response.RestCreateUserDTO;
 import vn.thaihoc.jobhunter.domain.response.RestUpdateUserDTO;
@@ -19,17 +20,31 @@ import vn.thaihoc.jobhunter.repository.UserRepository;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final CompanyService companyService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, CompanyService companyService) {
         this.userRepository = userRepository;
+        this.companyService = companyService;
     }
 
     public User handleCreateUser(User user) {
+        // check company
+        Company curCompany = user.getCompany();
+        if (curCompany != null) {
+            Company dbCompany = this.companyService.handleGetCompanyById(curCompany.getId());
+            user.setCompany(dbCompany);
+        }
         return this.userRepository.save(user);
     }
 
     public RestCreateUserDTO convertToRestCreateUserDTO(User user) {
         RestCreateUserDTO restCreateUserDTO = new RestCreateUserDTO();
+        RestCreateUserDTO.CompanyUser companyUser = restCreateUserDTO.new CompanyUser();
+        if (user.getCompany() != null) {
+            companyUser.setId(user.getCompany().getId());
+            companyUser.setName(user.getCompany().getName());
+            restCreateUserDTO.setCompany(companyUser);
+        }
         restCreateUserDTO.setId(user.getId());
         restCreateUserDTO.setName(user.getName());
         restCreateUserDTO.setEmail(user.getEmail());
@@ -42,6 +57,12 @@ public class UserService {
 
     public RestUserDTO convertToRestUserDTO(User user) {
         RestUserDTO restUserDTO = new RestUserDTO();
+        RestUserDTO.CompanyUser companyUser = new RestUserDTO.CompanyUser();
+        if (user.getCompany() != null) {
+            companyUser.setId(user.getCompany().getId());
+            companyUser.setName(user.getCompany().getName());
+            restUserDTO.setCompany(companyUser);
+        }
         restUserDTO.setId(user.getId());
         restUserDTO.setName(user.getName());
         restUserDTO.setEmail(user.getEmail());
@@ -55,6 +76,12 @@ public class UserService {
 
     public RestUpdateUserDTO convertToRestUpdateUserDTO(User user) {
         RestUpdateUserDTO restUpdateUserDTO = new RestUpdateUserDTO();
+        RestUpdateUserDTO.CompanyUser companyUser = new RestUpdateUserDTO.CompanyUser();
+        if (user.getCompany() != null) {
+            companyUser.setId(user.getCompany().getId());
+            companyUser.setName(user.getCompany().getName());
+            restUpdateUserDTO.setCompany(companyUser);
+        }
         restUpdateUserDTO.setId(user.getId());
         restUpdateUserDTO.setName(user.getName());
         restUpdateUserDTO.setGender(user.getGender());
@@ -90,7 +117,10 @@ public class UserService {
                         item.getAddress(),
                         item.getGender(),
                         item.getCreatedAt(),
-                        item.getUpdatedAt()))
+                        item.getUpdatedAt(),
+                        item.getCompany() != null
+                                ? new RestUserDTO.CompanyUser(item.getCompany().getId(), item.getCompany().getName())
+                                : null))
                 .collect(Collectors.toList());
         rs.setResult(listUser);
         return rs;
@@ -111,6 +141,12 @@ public class UserService {
     public User handleUpdateUser(User user) {
         User userUpdate = this.handleGetUserById(user.getId());
         if (userUpdate != null) {
+            // check company
+            Company curCompany = user.getCompany();
+            if (curCompany != null) {
+                Company dbCompany = this.companyService.handleGetCompanyById(curCompany.getId());
+                userUpdate.setCompany(dbCompany);
+            }
             userUpdate.setName(user.getName());
             userUpdate.setGender(user.getGender());
             userUpdate.setAge(user.getAge());
