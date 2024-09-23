@@ -62,7 +62,10 @@ public class CompanyController {
 
     @DeleteMapping("/{id}")
     @ApiMessage("Delete a company")
-    public ResponseEntity<Void> deleteCompany(@PathVariable("id") long id) {
+    public ResponseEntity<Void> deleteCompany(@PathVariable("id") long id) throws IdInvalidException {
+        if (this.companyService.handleGetCompanyById(id) == null) {
+            throw new IdInvalidException("Company with id = " + id + " not found");
+        }
         this.companyService.handleDeleteCompanyById(id);
         return ResponseEntity.ok(null);
     }
