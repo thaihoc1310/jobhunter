@@ -1,6 +1,8 @@
 package vn.thaihoc.jobhunter.service;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -13,6 +15,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,5 +54,26 @@ public class FileService {
                     StandardCopyOption.REPLACE_EXISTING);
         }
         return finalName;
+    }
+
+    public long getFileLength(String fileName, String folder) throws URISyntaxException {
+        URI uri = new URI(baseURI + folder + "/" + fileName);
+        Path path = Paths.get(uri);
+        File file = new File(path.toString());
+
+        if (!file.exists() || !file.isFile()) {
+            return 0;
+        } else {
+            return file.length();
+        }
+    }
+
+    public InputStreamResource getResource(String fileName, String folder)
+            throws URISyntaxException, FileNotFoundException {
+        URI uri = new URI(baseURI + folder + "/" + fileName);
+        Path path = Paths.get(uri);
+        File file = new File(path.toString());
+        return new InputStreamResource(new FileInputStream(file));
+
     }
 }
