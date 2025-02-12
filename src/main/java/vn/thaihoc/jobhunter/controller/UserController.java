@@ -84,7 +84,7 @@ public class UserController {
 
     @PutMapping("")
     @ApiMessage("Update a user")
-    public ResponseEntity<RestUpdateUserDTO> updateUser(@RequestBody User user)
+    public ResponseEntity<RestUpdateUserDTO> updateUser(@Valid @RequestBody User user)
             throws IdInvalidException {
         User updateUser = this.userService.handleUpdateUser(user);
         if (updateUser == null) {
