@@ -1,7 +1,6 @@
 package vn.thaihoc.jobhunter.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;

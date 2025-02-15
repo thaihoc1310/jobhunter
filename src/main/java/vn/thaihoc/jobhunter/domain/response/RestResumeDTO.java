@@ -17,6 +17,7 @@ public class RestResumeDTO {
     private String email;
     private String url;
     private StatusEnum status;
+    private String companyName;
     private UserResume user;
     private JobResume job;
     private Instant createdAt;

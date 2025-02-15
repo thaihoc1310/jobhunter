@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import vn.thaihoc.jobhunter.domain.Job;
 import vn.thaihoc.jobhunter.domain.Resume;
 import vn.thaihoc.jobhunter.domain.response.RestCreateResumeDTO;
 import vn.thaihoc.jobhunter.domain.response.RestResumeDTO;
@@ -63,13 +64,15 @@ public class ResumeService {
         Resume resume = handleGetResumeById(id);
         RestResumeDTO resumeDTO = null;
         if (resume != null) {
+            Job job = resume.getJob();
             resumeDTO = new RestResumeDTO(
                     resume.getId(),
                     resume.getEmail(),
                     resume.getUrl(),
                     resume.getStatus(),
+                    job != null ? job.getCompany().getName() : null,
                     new RestResumeDTO.UserResume(resume.getUser().getId(), resume.getUser().getName()),
-                    new RestResumeDTO.JobResume(resume.getJob().getId(), resume.getJob().getName()),
+                    job != null ? new RestResumeDTO.JobResume(job.getId(), job.getName()) : null,
                     resume.getCreatedAt(),
                     resume.getUpdatedAt(),
                     resume.getCreatedBy(),

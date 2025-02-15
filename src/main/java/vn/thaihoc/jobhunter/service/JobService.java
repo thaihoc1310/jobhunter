@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import vn.thaihoc.jobhunter.domain.Company;
 import vn.thaihoc.jobhunter.domain.Job;
 import vn.thaihoc.jobhunter.domain.response.RestCreateJobDTO;
 import vn.thaihoc.jobhunter.domain.response.RestUpdateJobDTO;
@@ -17,10 +18,12 @@ import java.util.List;
 public class JobService {
     final private JobRepository jobRepository;
     final private SkillService skillService;
+    final private CompanyService companyService;
 
-    public JobService(JobRepository jobRepository, SkillService skillService) {
+    public JobService(JobRepository jobRepository, SkillService skillService, CompanyService companyService) {
         this.jobRepository = jobRepository;
         this.skillService = skillService;
+        this.companyService = companyService;
     }
 
     public RestCreateJobDTO handleCreateJob(Job job) {
@@ -28,6 +31,12 @@ public class JobService {
         if (job.getSkills() != null) {
             List<Long> skillIds = job.getSkills().stream().map(skill -> skill.getId()).toList();
             job.setSkills(this.skillService.handleGetSkillsByIds(skillIds));
+        }
+        if (job.getCompany() != null) {
+            Company company = this.companyService.handleGetCompanyById(job.getCompany().getId());
+            if (company != null) {
+                job.setCompany(company);
+            }
         }
         job = this.jobRepository.save(job);
 
@@ -78,17 +87,21 @@ public class JobService {
                 List<Long> skillIds = newJob.getSkills().stream().map(skill -> skill.getId()).toList();
                 jobUpdate.setSkills(this.skillService.handleGetSkillsByIds(skillIds));
             }
-            if (jobUpdate != null) {
-                jobUpdate.setName(newJob.getName());
-                jobUpdate.setSalary(newJob.getSalary());
-                jobUpdate.setQuantity(newJob.getQuantity());
-                jobUpdate.setLocation(newJob.getLocation());
-                jobUpdate.setLevel(newJob.getLevel());
-                jobUpdate.setStartDate(newJob.getStartDate());
-                jobUpdate.setEndDate(newJob.getEndDate());
-                jobUpdate.setActive(newJob.isActive());
-                this.jobRepository.save(jobUpdate);
+            if (newJob.getCompany() != null) {
+                Company company = this.companyService.handleGetCompanyById(newJob.getCompany().getId());
+                if (company != null) {
+                    jobUpdate.setCompany(company);
+                }
             }
+            jobUpdate.setName(newJob.getName());
+            jobUpdate.setSalary(newJob.getSalary());
+            jobUpdate.setQuantity(newJob.getQuantity());
+            jobUpdate.setLocation(newJob.getLocation());
+            jobUpdate.setLevel(newJob.getLevel());
+            jobUpdate.setStartDate(newJob.getStartDate());
+            jobUpdate.setEndDate(newJob.getEndDate());
+            jobUpdate.setActive(newJob.isActive());
+            this.jobRepository.save(jobUpdate);
             updateJobDTO = new RestUpdateJobDTO(
                     jobUpdate.getId(),
                     jobUpdate.getName(),

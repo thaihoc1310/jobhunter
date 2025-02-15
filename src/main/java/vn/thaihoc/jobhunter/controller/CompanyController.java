@@ -49,6 +49,16 @@ public class CompanyController {
         return ResponseEntity.ok(this.companyService.handleGetAllCompanies(spec, pageable));
     }
 
+    @GetMapping("/{id}")
+    @ApiMessage("Fetch a company")
+    public ResponseEntity<Company> getCompanyById(@PathVariable("id") long id) throws IdInvalidException {
+        Company company = this.companyService.handleGetCompanyById(id);
+        if (company == null) {
+            throw new IdInvalidException("Company with id = " + id + " not found");
+        }
+        return ResponseEntity.ok(company);
+    }
+
     @PutMapping("")
     @ApiMessage("Update a company")
     public ResponseEntity<Company> updateCompany(@Valid @RequestBody Company company)
