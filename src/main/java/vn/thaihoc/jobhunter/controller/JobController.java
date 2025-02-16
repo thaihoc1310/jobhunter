@@ -16,6 +16,7 @@ import vn.thaihoc.jobhunter.util.error.IdInvalidException;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,7 +41,7 @@ public class JobController {
     public ResponseEntity<RestCreateJobDTO> createNewJob(@Valid @RequestBody Job job)
             throws MethodArgumentNotValidException {
         RestCreateJobDTO newJob = this.jobService.handleCreateJob(job);
-        return ResponseEntity.ok(newJob);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newJob);
     }
 
     @GetMapping("")
