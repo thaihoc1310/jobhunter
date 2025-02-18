@@ -69,6 +69,14 @@ public class RoleService {
         this.roleRepository.deleteById(id);
     }
 
+    public Role handleGetRoleById(Long id) throws IdInvalidException {
+        Role role = this.getRoleById(id);
+        if (role == null) {
+            throw new IdInvalidException("Role with id = " + id + " does not exist");
+        }
+        return role;
+    }
+
     public ResultPaginationDTO handleGetAllRoles(Specification<Role> spec, Pageable pageable) {
         Page<Role> pageRole = this.roleRepository.findAll(spec, pageable);
         ResultPaginationDTO rs = new ResultPaginationDTO();

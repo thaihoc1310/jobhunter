@@ -149,5 +149,4 @@ public class ResumeService {
         rs.setResult(listResume);
         return rs;
     }
-
 }

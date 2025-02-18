@@ -45,6 +45,12 @@ public class RoleController {
         return ResponseEntity.status(HttpStatus.OK).body(updatedRole);
     }
 
+    @GetMapping("/{id}")
+    @ApiMessage("Fetch a role by id")
+    public ResponseEntity<Role> fetchRoleById(@PathVariable Long id) throws IdInvalidException {
+        return ResponseEntity.ok(this.roleService.handleGetRoleById(id));
+    }
+
     @GetMapping("")
     @ApiMessage("Fetch all roles")
     public ResponseEntity<ResultPaginationDTO> fetchAllRoles(@Filter Specification<Role> spec,

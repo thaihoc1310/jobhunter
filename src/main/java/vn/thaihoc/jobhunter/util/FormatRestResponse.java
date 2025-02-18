@@ -17,7 +17,7 @@ import vn.thaihoc.jobhunter.util.annotation.ApiMessage;
 public class FormatRestResponse implements ResponseBodyAdvice<Object> {
 
     @Override
-    public boolean supports(MethodParameter returnType, Class converterType) {
+    public boolean supports(MethodParameter returnType, @SuppressWarnings("rawtypes") Class converterType) {
         // what cotroller want overwrite
         return true;
     }

@@ -45,7 +45,7 @@ public class UserController {
     @ApiMessage("Create a new user")
     public ResponseEntity<RestCreateUserDTO> createNewUser(@Valid @RequestBody User user)
             throws EmailInvalidException, MethodArgumentNotValidException {
-        if (this.userService.handleCheckUserExistByEmail(user.getEmail())) {
+        if (this.userService.handleCheckEmailExist(user.getEmail())) {
             throw new EmailInvalidException("Email " + user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -84,7 +84,7 @@ public class UserController {
 
     @PutMapping("")
     @ApiMessage("Update a user")
-    public ResponseEntity<RestUpdateUserDTO> updateUser(@Valid @RequestBody User user)
+    public ResponseEntity<RestUpdateUserDTO> updateUser(@RequestBody User user)
             throws IdInvalidException {
         User updateUser = this.userService.handleUpdateUser(user);
         if (updateUser == null) {

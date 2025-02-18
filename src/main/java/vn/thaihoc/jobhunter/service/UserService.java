@@ -123,10 +123,6 @@ public class UserService {
         this.userRepository.deleteById(id);
     }
 
-    public boolean handleCheckUserExistByEmail(String email) {
-        return this.userRepository.existsByEmail(email);
-    }
-
     public ResultPaginationDTO handleGetAllUsers(Specification<User> spec, Pageable pageable) {
         Page<User> pageUser = this.userRepository.findAll(spec, pageable);
         ResultPaginationDTO rs = new ResultPaginationDTO();
@@ -189,6 +185,10 @@ public class UserService {
 
     public User handleGetUserByRefreshTokenAndEmail(String token, String email) {
         return this.userRepository.findByRefreshTokenAndEmail(token, email);
+    }
+
+    public boolean handleCheckEmailExist(String email) {
+        return this.userRepository.existsByEmail(email);
     }
 
 }
