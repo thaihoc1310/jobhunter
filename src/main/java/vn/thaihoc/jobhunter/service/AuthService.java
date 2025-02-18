@@ -26,8 +26,10 @@ public class AuthService {
     public ResponseEntity<RestLoginDTO> createTokenAndCookie(String emailLogin) {
         User currentUser = this.userService.handleGetUserByUsername(emailLogin);
         RestLoginDTO res = new RestLoginDTO();
-        res.setUser(new RestLoginDTO.UserLogin(currentUser.getId(), currentUser.getEmail(), currentUser.getName()));
-        String access_token = this.sercurityUtil.createAccessToken(emailLogin, res.getUser());
+        if (currentUser != null)
+            res.setUser(new RestLoginDTO.UserLogin(currentUser.getId(), currentUser.getEmail(), currentUser.getName(),
+                    currentUser.getRole()));
+        String access_token = this.sercurityUtil.createAccessToken(emailLogin, res);
         res.setAccessToken(access_token);
         // create refresh token
         String refresh_token = this.sercurityUtil.createRefreshToken(emailLogin, res);

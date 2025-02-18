@@ -71,8 +71,9 @@ public class AuthController {
         String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         User currentUser = this.userService.handleGetUserByUsername(email);
         RestLoginDTO.UserAccount userAccount = new RestLoginDTO.UserAccount();
-        userAccount.setUser(new RestLoginDTO.UserLogin(currentUser.getId(), currentUser.getEmail(),
-                currentUser.getName()));
+        if (currentUser != null)
+            userAccount.setUser(new RestLoginDTO.UserLogin(currentUser.getId(), currentUser.getEmail(),
+                    currentUser.getName(), currentUser.getRole()));
         return ResponseEntity.ok(userAccount);
     }
 
