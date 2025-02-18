@@ -2,7 +2,9 @@ package vn.thaihoc.jobhunter.domain.response;
 
 import java.time.Instant;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import vn.thaihoc.jobhunter.util.constant.GenderEnum;
 
@@ -17,10 +19,20 @@ public class RestCreateUserDTO {
     private GenderEnum gender;
     private Instant createdAt;
     private CompanyUser company;
+    private RoleUser role;
 
     @Getter
     @Setter
-    public class CompanyUser {
+    public static class CompanyUser {
+        private long id;
+        private String name;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class RoleUser {
         private long id;
         private String name;
     }

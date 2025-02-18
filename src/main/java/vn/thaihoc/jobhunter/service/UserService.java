@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import vn.thaihoc.jobhunter.domain.Company;
+import vn.thaihoc.jobhunter.domain.Role;
 import vn.thaihoc.jobhunter.domain.User;
 import vn.thaihoc.jobhunter.domain.response.RestCreateUserDTO;
 import vn.thaihoc.jobhunter.domain.response.RestUpdateUserDTO;
@@ -21,10 +22,12 @@ import vn.thaihoc.jobhunter.repository.UserRepository;
 public class UserService {
     private final UserRepository userRepository;
     private final CompanyService companyService;
+    private final RoleService roleService;
 
-    public UserService(UserRepository userRepository, CompanyService companyService) {
+    public UserService(UserRepository userRepository, CompanyService companyService, RoleService roleService) {
         this.userRepository = userRepository;
         this.companyService = companyService;
+        this.roleService = roleService;
     }
 
     public User handleCreateUser(User user) {
@@ -34,16 +37,29 @@ public class UserService {
             Company dbCompany = this.companyService.handleGetCompanyById(curCompany.getId());
             user.setCompany(dbCompany);
         }
+
+        // check role
+        Role curRole = user.getRole();
+        if (curRole != null) {
+            Role dbRole = this.roleService.getRoleById(curRole.getId());
+            user.setRole(dbRole);
+        }
         return this.userRepository.save(user);
     }
 
     public RestCreateUserDTO convertToRestCreateUserDTO(User user) {
         RestCreateUserDTO restCreateUserDTO = new RestCreateUserDTO();
-        RestCreateUserDTO.CompanyUser companyUser = restCreateUserDTO.new CompanyUser();
+        RestCreateUserDTO.CompanyUser companyUser = new RestCreateUserDTO.CompanyUser();
+        RestCreateUserDTO.RoleUser roleUser = new RestCreateUserDTO.RoleUser();
         if (user.getCompany() != null) {
             companyUser.setId(user.getCompany().getId());
             companyUser.setName(user.getCompany().getName());
             restCreateUserDTO.setCompany(companyUser);
+        }
+        if (user.getRole() != null) {
+            roleUser.setId(user.getRole().getId());
+            roleUser.setName(user.getRole().getName());
+            restCreateUserDTO.setRole(roleUser);
         }
         restCreateUserDTO.setId(user.getId());
         restCreateUserDTO.setName(user.getName());
@@ -58,10 +74,16 @@ public class UserService {
     public RestUserDTO convertToRestUserDTO(User user) {
         RestUserDTO restUserDTO = new RestUserDTO();
         RestUserDTO.CompanyUser companyUser = new RestUserDTO.CompanyUser();
+        RestUserDTO.RoleUser roleUser = new RestUserDTO.RoleUser();
         if (user.getCompany() != null) {
             companyUser.setId(user.getCompany().getId());
             companyUser.setName(user.getCompany().getName());
             restUserDTO.setCompany(companyUser);
+        }
+        if (user.getRole() != null) {
+            roleUser.setId(user.getRole().getId());
+            roleUser.setName(user.getRole().getName());
+            restUserDTO.setRole(roleUser);
         }
         restUserDTO.setId(user.getId());
         restUserDTO.setName(user.getName());
@@ -77,10 +99,16 @@ public class UserService {
     public RestUpdateUserDTO convertToRestUpdateUserDTO(User user) {
         RestUpdateUserDTO restUpdateUserDTO = new RestUpdateUserDTO();
         RestUpdateUserDTO.CompanyUser companyUser = new RestUpdateUserDTO.CompanyUser();
+        RestUpdateUserDTO.RoleUser roleUser = new RestUpdateUserDTO.RoleUser();
         if (user.getCompany() != null) {
             companyUser.setId(user.getCompany().getId());
             companyUser.setName(user.getCompany().getName());
             restUpdateUserDTO.setCompany(companyUser);
+        }
+        if (user.getRole() != null) {
+            roleUser.setId(user.getRole().getId());
+            roleUser.setName(user.getRole().getName());
+            restUpdateUserDTO.setRole(roleUser);
         }
         restUpdateUserDTO.setId(user.getId());
         restUpdateUserDTO.setName(user.getName());
@@ -109,18 +137,7 @@ public class UserService {
         mt.setTotal(pageUser.getTotalElements());
         rs.setMeta(mt);
         List<RestUserDTO> listUser = pageUser.getContent()
-                .stream().map(item -> new RestUserDTO(
-                        item.getId(),
-                        item.getName(),
-                        item.getEmail(),
-                        item.getAge(),
-                        item.getAddress(),
-                        item.getGender(),
-                        item.getCreatedAt(),
-                        item.getUpdatedAt(),
-                        item.getCompany() != null
-                                ? new RestUserDTO.CompanyUser(item.getCompany().getId(), item.getCompany().getName())
-                                : null))
+                .stream().map(item -> this.convertToRestUserDTO(item))
                 .collect(Collectors.toList());
         rs.setResult(listUser);
         return rs;
@@ -146,6 +163,12 @@ public class UserService {
             if (curCompany != null) {
                 Company dbCompany = this.companyService.handleGetCompanyById(curCompany.getId());
                 userUpdate.setCompany(dbCompany);
+            }
+            // check role
+            Role curRole = user.getRole();
+            if (curRole != null) {
+                Role dbRole = this.roleService.getRoleById(curRole.getId());
+                userUpdate.setRole(dbRole);
             }
             userUpdate.setName(user.getName());
             userUpdate.setGender(user.getGender());

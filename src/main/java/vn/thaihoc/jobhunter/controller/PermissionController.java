@@ -1,7 +1,6 @@
 package vn.thaihoc.jobhunter.controller;
 
 import vn.thaihoc.jobhunter.domain.Permission;
-import vn.thaihoc.jobhunter.domain.Skill;
 import vn.thaihoc.jobhunter.domain.response.ResultPaginationDTO;
 import vn.thaihoc.jobhunter.service.PermissionService;
 import vn.thaihoc.jobhunter.util.annotation.ApiMessage;
@@ -24,7 +23,6 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/v1/permissions")

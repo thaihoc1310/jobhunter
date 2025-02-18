@@ -70,6 +70,10 @@ public class User {
     @JsonIgnore // avoid recall
     List<Resume> resumes;
 
+    @ManyToOne /* eager by default */
+    @JoinColumn(name = "role_id")
+    private Role role;
+
     @PrePersist
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent()

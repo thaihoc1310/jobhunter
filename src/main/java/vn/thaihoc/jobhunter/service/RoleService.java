@@ -61,7 +61,7 @@ public class RoleService {
         return this.roleRepository.save(roleInDB);
     }
 
-    private Role getRoleById(long id) {
+    public Role getRoleById(long id) {
         return this.roleRepository.findById(id).orElse(null);
     }
 
