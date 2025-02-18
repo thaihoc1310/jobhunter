@@ -83,4 +83,10 @@ public class ResumeController {
         return ResponseEntity.ok(resume);
     }
 
+    @PostMapping("/by-user")
+    @ApiMessage("Get list resumes by user")
+    public ResponseEntity<ResultPaginationDTO> fetchResumeByUser(Pageable pageable)
+            throws MethodArgumentNotValidException, IdInvalidException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.resumeService.fetchResumeByUser(pageable));
+    }
 }
