@@ -120,4 +120,8 @@ public class JobService {
         }
         return updateJobDTO;
     }
+
+    public List<Job> getAllJobs() {
+        return this.jobRepository.findAll();
+    }
 }
