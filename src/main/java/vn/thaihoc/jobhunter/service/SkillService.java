@@ -56,7 +56,8 @@ public class SkillService {
 
     public void handleDeleteSkill(Skill skill) {
         // delete this skill from all jobs
-        skill.getJobs().forEach(user -> user.getSkills().remove(skill));
+        skill.getJobs().forEach(job -> job.getSkills().remove(skill));
+        skill.getSubscribers().forEach(sub -> sub.getSkills().remove(skill));
         this.skillRepository.delete(skill);
     }
 
