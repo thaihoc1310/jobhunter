@@ -1,4 +1,4 @@
-package vn.thaihoc.jobhunter.domain.response;
+package vn.thaihoc.jobhunter.domain.response.resume;
 
 import java.time.Instant;
 
@@ -11,8 +11,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestUpdateResumeDTO {
-    private Instant updatedAt;
+public class RestCreateResumeDTO {
+    private long id;
 
-    private String updatedBy;
+    private Instant createdAt;
+
+    private String createdBy;
 }

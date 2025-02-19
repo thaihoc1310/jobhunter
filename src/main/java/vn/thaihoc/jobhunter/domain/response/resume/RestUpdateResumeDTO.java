@@ -1,4 +1,4 @@
-package vn.thaihoc.jobhunter.domain.file;
+package vn.thaihoc.jobhunter.domain.response.resume;
 
 import java.time.Instant;
 
@@ -7,11 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResUploadFileDTO {
-    private String fileName;
-    private Instant uploadedAt;
+public class RestUpdateResumeDTO {
+    private Instant updatedAt;
+
+    private String updatedBy;
 }

@@ -14,7 +14,6 @@ import vn.thaihoc.jobhunter.domain.Role;
 import vn.thaihoc.jobhunter.domain.User;
 import vn.thaihoc.jobhunter.service.UserService;
 import vn.thaihoc.jobhunter.util.SecurityUtil;
-import vn.thaihoc.jobhunter.util.error.IdInvalidException;
 import vn.thaihoc.jobhunter.util.error.PermissionException;
 
 public class PermissionInterceptor implements HandlerInterceptor {

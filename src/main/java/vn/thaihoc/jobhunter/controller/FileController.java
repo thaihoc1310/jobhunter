@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import vn.thaihoc.jobhunter.domain.file.ResUploadFileDTO;
+import vn.thaihoc.jobhunter.domain.response.file.ResUploadFileDTO;
 import vn.thaihoc.jobhunter.service.FileService;
 import vn.thaihoc.jobhunter.util.annotation.ApiMessage;
 import vn.thaihoc.jobhunter.util.error.StorageException;

@@ -7,9 +7,9 @@ import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
 import vn.thaihoc.jobhunter.domain.Job;
-import vn.thaihoc.jobhunter.domain.response.RestCreateJobDTO;
-import vn.thaihoc.jobhunter.domain.response.RestUpdateJobDTO;
 import vn.thaihoc.jobhunter.domain.response.ResultPaginationDTO;
+import vn.thaihoc.jobhunter.domain.response.job.RestCreateJobDTO;
+import vn.thaihoc.jobhunter.domain.response.job.RestUpdateJobDTO;
 import vn.thaihoc.jobhunter.service.JobService;
 import vn.thaihoc.jobhunter.util.annotation.ApiMessage;
 import vn.thaihoc.jobhunter.util.error.IdInvalidException;

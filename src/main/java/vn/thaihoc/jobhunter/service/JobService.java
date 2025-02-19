@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 import vn.thaihoc.jobhunter.domain.Company;
 import vn.thaihoc.jobhunter.domain.Job;
-import vn.thaihoc.jobhunter.domain.response.RestCreateJobDTO;
-import vn.thaihoc.jobhunter.domain.response.RestUpdateJobDTO;
 import vn.thaihoc.jobhunter.domain.response.ResultPaginationDTO;
+import vn.thaihoc.jobhunter.domain.response.job.RestCreateJobDTO;
+import vn.thaihoc.jobhunter.domain.response.job.RestUpdateJobDTO;
 import vn.thaihoc.jobhunter.repository.JobRepository;
 
 import java.util.List;

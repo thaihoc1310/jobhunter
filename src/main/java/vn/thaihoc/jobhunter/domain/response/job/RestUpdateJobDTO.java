@@ -1,4 +1,4 @@
-package vn.thaihoc.jobhunter.domain.response;
+package vn.thaihoc.jobhunter.domain.response.job;
 
 import vn.thaihoc.jobhunter.util.constant.LevelEnum;
 

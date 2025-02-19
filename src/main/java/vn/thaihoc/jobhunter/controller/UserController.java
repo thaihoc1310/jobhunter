@@ -6,10 +6,10 @@ import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
 import vn.thaihoc.jobhunter.domain.User;
-import vn.thaihoc.jobhunter.domain.response.RestCreateUserDTO;
-import vn.thaihoc.jobhunter.domain.response.RestUpdateUserDTO;
-import vn.thaihoc.jobhunter.domain.response.RestUserDTO;
 import vn.thaihoc.jobhunter.domain.response.ResultPaginationDTO;
+import vn.thaihoc.jobhunter.domain.response.user.RestCreateUserDTO;
+import vn.thaihoc.jobhunter.domain.response.user.RestUpdateUserDTO;
+import vn.thaihoc.jobhunter.domain.response.user.RestUserDTO;
 import vn.thaihoc.jobhunter.service.UserService;
 import vn.thaihoc.jobhunter.util.annotation.ApiMessage;
 import vn.thaihoc.jobhunter.util.error.EmailInvalidException;

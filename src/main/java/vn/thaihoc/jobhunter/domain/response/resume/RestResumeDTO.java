@@ -1,4 +1,4 @@
-package vn.thaihoc.jobhunter.domain.response;
+package vn.thaihoc.jobhunter.domain.response.resume;
 
 import java.time.Instant;
 
@@ -6,29 +6,33 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import vn.thaihoc.jobhunter.util.constant.GenderEnum;
+import vn.thaihoc.jobhunter.util.constant.StatusEnum;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestUserDTO {
+public class RestResumeDTO {
     private long id;
-    private String name;
     private String email;
-    private int age;
-    private String address;
-    private GenderEnum gender;
+    private String url;
+    private StatusEnum status;
+    private String companyName;
+    private UserResume user;
+    private JobResume job;
     private Instant createdAt;
+
     private Instant updatedAt;
-    private CompanyUser company;
-    private RoleUser role;
+
+    private String createdBy;
+
+    private String updatedBy;
 
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class CompanyUser {
+    public static class UserResume {
         private long id;
         private String name;
     }
@@ -37,8 +41,9 @@ public class RestUserDTO {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class RoleUser {
+    public static class JobResume {
         private long id;
         private String name;
     }
+
 }
