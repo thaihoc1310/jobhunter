@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import vn.thaihoc.jobhunter.domain.Subscriber;
 import vn.thaihoc.jobhunter.service.SubscriberService;
+import vn.thaihoc.jobhunter.util.SecurityUtil;
 import vn.thaihoc.jobhunter.util.annotation.ApiMessage;
 import vn.thaihoc.jobhunter.util.error.EmailInvalidException;
 import vn.thaihoc.jobhunter.util.error.IdInvalidException;
@@ -39,6 +40,13 @@ public class SubscriberController {
             throws IdInvalidException {
         Subscriber updatedSubscriber = this.subscriberService.handleUpdateSubscriber(subscriber);
         return ResponseEntity.status(HttpStatus.OK).body(updatedSubscriber);
+    }
+
+    @PostMapping("/skills")
+    @ApiMessage("Get subscriber's skills")
+    public ResponseEntity<Subscriber> getSubscriberSkills() throws EmailInvalidException {
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+        return ResponseEntity.status(HttpStatus.OK).body(this.subscriberService.handleGetSubscriberByEmail(email));
     }
 
 }

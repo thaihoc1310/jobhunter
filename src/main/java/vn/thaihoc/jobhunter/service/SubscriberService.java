@@ -3,14 +3,12 @@ package vn.thaihoc.jobhunter.service;
 import java.util.List;
 
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import vn.thaihoc.jobhunter.domain.Job;
 import vn.thaihoc.jobhunter.domain.Skill;
 import vn.thaihoc.jobhunter.domain.Subscriber;
-import vn.thaihoc.jobhunter.domain.response.email.ResEmailJob;
 import vn.thaihoc.jobhunter.repository.JobRepository;
 import vn.thaihoc.jobhunter.repository.SubscriberRepository;
 import vn.thaihoc.jobhunter.util.error.EmailInvalidException;
@@ -62,6 +60,14 @@ public class SubscriberService {
         return this.subscriberRepository.findById(id).orElse(null);
     }
 
+    public Subscriber handleGetSubscriberByEmail(String email) throws EmailInvalidException {
+        Subscriber sub = this.subscriberRepository.findByEmail(email).orElse(null);
+        if (sub == null) {
+            throw new EmailInvalidException("Email not found");
+        }
+        return sub;
+    }
+
     @Async
     @Transactional
     public void sendSubscribersEmailJobs() {
@@ -88,13 +94,13 @@ public class SubscriberService {
         }
     }
 
-    private ResEmailJob convertJobToSendEmail(Job job) {
-        ResEmailJob res = new ResEmailJob();
-        res.setName(job.getName());
-        res.setSalary(job.getSalary());
-        res.setCompany(new ResEmailJob.CompanyEmail(job.getCompany().getName()));
-        res.setSkills(job.getSkills().stream().map(
-                skill -> new ResEmailJob.SkillEmail(skill.getName())).toList());
-        return res;
-    }
+    // private ResEmailJob convertJobToSendEmail(Job job) {
+    // ResEmailJob res = new ResEmailJob();
+    // res.setName(job.getName());
+    // res.setSalary(job.getSalary());
+    // res.setCompany(new ResEmailJob.CompanyEmail(job.getCompany().getName()));
+    // res.setSkills(job.getSkills().stream().map(
+    // skill -> new ResEmailJob.SkillEmail(skill.getName())).toList());
+    // return res;
+    // }
 }

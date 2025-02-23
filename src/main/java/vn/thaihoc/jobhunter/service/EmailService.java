@@ -1,28 +1,23 @@
 package vn.thaihoc.jobhunter.service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import vn.thaihoc.jobhunter.domain.Job;
 
 @Service
 public class EmailService {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
-    private final JobService jobService;
 
-    public EmailService(JavaMailSender javaMailSender, SpringTemplateEngine templateEngine, JobService jobService) {
-        this.jobService = jobService;
+    public EmailService(JavaMailSender javaMailSender, SpringTemplateEngine templateEngine) {
         this.javaMailSender = javaMailSender;
         this.templateEngine = templateEngine;
     }
