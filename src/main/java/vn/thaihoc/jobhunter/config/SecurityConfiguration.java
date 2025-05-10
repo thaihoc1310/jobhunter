@@ -99,6 +99,7 @@ public class SecurityConfiguration {
                 // .authenticationEntryPoint(customAuthenticationEntryPoint) // 401
                 // .accessDeniedHandler(new BearerTokenAccessDeniedHandler())) // 403
                 .formLogin(f -> f.disable())
+                // don't use spring session
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
